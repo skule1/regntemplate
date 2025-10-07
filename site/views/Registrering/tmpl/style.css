@@ -1,0 +1,40 @@
+<style>h1 {
+    color: red;
+}
+
+p {
+    color: blue;
+}
+
+input {
+    height: 48;
+}
+
+tr {}
+
+td {
+    margin-right: 10px;
+
+}
+
+/* table, th, td {
+  border: 1px solid black;
+
+}*/
+.fff {
+    background-color: blanchedalmond;
+    color: black;
+}
+
+.debet {
+    vertical-align: text-top;
+
+}
+
+.table1 {
+    vertical-align: text-top;
+    border: 5px;
+
+}
+
+</style>

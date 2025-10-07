@@ -1,0 +1,420 @@
+
+/*
+function makeGamePlayer(name, totalScore, gamesPlayed) {
+  // Define desired object
+  var obj = {
+    name:  name,
+    totalScore: totalScore,
+    gamesPlayed: gamesPlayed
+  };
+  alert(obj.name);
+  return obj;
+}
+makeGamePlayer("aa",50,"bb");
+a2();
+
+function a2(){
+    let g=makeGamePlayer("AA",56,"BB");
+    alert("a2 "+g.name);;
+}
+*/
+
+function datokonv2(dt) {
+    let vv = document.getElementById('dato').value;
+    let text = vv;
+
+    if ((vv.indexOf(",") != -1) || (vv.indexOf(".") != -1)) {
+        if (vv.indexOf(",") != -1) {
+            var result = text.indexOf(",");
+            var min = vv.substring(0, result);
+            if ((min > 24) || (min < 0)) alert("feil minutt " + min);
+            var result1 = text.indexOf(",", result + 1);
+        } else {
+            var result = text.indexOf(".");
+            var min = vv.substring(0, result);
+            if ((min > 24) || (min < 0)) alert("feil minutt " + min);
+            var result1 = text.indexOf(".", result + 1);
+        };
+        var time = vv.substring(result + 1, result1);
+
+        if ((time > 24) || (time < 0)) alert("feil time " + time);
+        var ar = vv.substring(result1 + 1);
+        var arstr = "19" + ar.toString();
+        if (ar < 24) arstr = "20" + ar.toString();
+        else arstr = "19" + ar.toString();
+        var y = arstr + "-" + time.toString() + "-" + min.toString();
+        document.getElementById('dato').value = y;
+    }
+    if (document.getElementById('art').value == "6")
+        document.getElementById("belop").focus();
+    else
+        document.getElementById("debet").focus();
+
+    //return y;
+}
+
+
+function slett() {
+    //  alert("slett");
+    jQuery.ajax({
+        type: "GET",
+        url: "/components/com_regn/views/Registrering/tmpl/update.php?kommando=slett",
+        data: ({}),
+        cache: false,
+        success: function(response) {
+            alert("Siste post ble slettet.");
+        }
+    });
+    location.reload();
+}
+
+function PrintDiv() {
+    var divToPrint = document.getElementById('divToPrint');
+    var popupWin = window.open('', '_blank', 'width=900,height=750');
+    popupWin.document.open();
+    popupWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</html>');
+    popupWin.document.close();
+}
+
+
+
+function neste(i) {
+    //  alert("input " + i);
+    const obj = art();
+    alert("obj: " + obj.Navn);
+    var ii = i;
+    if (i == "debet") {
+        var konto = document.getElementById("debet").value;
+    } else if (i = "kredit") {
+        var konto = document.getElementById("kredit").value;
+    }
+    //   alert("neste id: "+konto);
+    // alert("ret1: " + ii);
+    jQuery.ajax({
+        type: "POST",
+        url: "/components/com_regn/views/Registrering/tmpl/update.php",
+        data: ({
+            mode: "konto",
+            konto: konto
+        }),
+        cache: false,
+        success: function(tekst) {
+            //        alert("ret: " + tekst);
+            const obj = JSON.parse(tekst);
+            //     const json = '{"result":true, "count":42}';
+            // const obj = JSON.parse(json);
+            //     alert("ret: " +obj.count);
+            if (ii = "debet") {
+                //        alert("debet");
+                document.getElementById("1info").value = obj.Navn;
+                document.getElementById("1infokto").value = obj.Ktonr;
+            } else if (ii = "kredit") {
+                //   alert("kredit");
+                document.getElementById("2info").value = obj.Navn;
+                document.getElementById("2infokto").value = obj.Ktonr;
+            }
+            /*     if (ii = "debet") {
+                     document.getElementById("kredit").focus();
+                 } else if (ii = "kredit") {
+                     document.getElementById("belop").focus();
+                 }
+                 */
+        }
+    
+
+    });
+    //  alert("ret: " + ii + " : " + i);
+    if (ii == "debet") {
+        //     alert("focus kredit "+ii);
+        document.getElementById("kredit").focus();
+    } else {
+        //     alert("focus "+ii);
+        document.getElementById(ii).focus();
+    }
+
+
+}
+
+function nestekred(i) {
+    //  alert("input " + i);
+    var ii = i;
+
+    var konto = document.getElementById("kredit").value;
+
+    //   alert("neste id: "+konto);
+    //  alert("ret1: " + ii);
+    jQuery.ajax({
+        type: "POST",
+        url: "/components/com_regn/views/Registrering/tmpl/update.php",
+        data: ({
+            mode: "konto",
+            konto: konto
+        }),
+        cache: false,
+        success: function(tekst) {
+            //      alert("ret: " + ii + " : " + i);
+            const obj = JSON.parse(tekst);
+            document.getElementById("2info").value = obj.Navn;
+            document.getElementById("2infokto").value = obj.Ktonr;
+        }
+        //return tekst;
+
+    });
+    //   alert("ret2: " + ii);
+    document.getElementById("belop").focus();
+
+
+
+}
+
+function ktodef(i) {
+    //  alert("input " + i);
+    var ii = i;
+
+    var konto = document.getElementById(i).value;
+
+    //   alert("neste id: "+konto);
+    //  alert("ret1: " + ii);
+    jQuery.ajax({
+        type: "POST",
+        url: "/components/com_regn/views/Registrering/tmpl/update.php",
+        data: ({
+            mode: "konto",
+            konto: konto
+        }),
+        cache: false,
+        success: function(tekst) {
+            //      alert("ret: " + ii + " : " + i);
+            const obj = JSON.parse(tekst);
+            if (i == "debet") {
+                document.getElementById("1info").value = obj.Navn;
+                document.getElementById("1infokto").value = obj.Ktonr;
+            } else if (i == "kredit") {
+                document.getElementById("2info").value = obj.Navn;
+                document.getElementById("2infokto").value = obj.Ktonr;
+            }
+        }
+        //return tekst;
+
+    });
+    //   alert("ret2: " + ii);
+    document.getElementById("belop").focus();
+
+
+
+}
+
+function test(a) {
+    return 2 * a;
+}
+
+function art4(art) {
+    alert("art4 " + art);
+    jQuery.ajax({
+        type: "POST",
+        url: "/components/com_regn/views/Registrering/tmpl/update.php",
+        data: ({
+            mode: "artcheck",
+            art: art
+        }),
+        cache: false,
+        success: function(tekst) {
+            const obj1 = JSON.parse(tekst);
+            //      alert("art ret: " +" ::: "+  tekst);
+            //     alert("retur: "+obj1.id);
+            return obj1
+        }
+    });
+
+}
+
+
+
+function fart() {
+    var lart = document.getElementById("art").value;
+    return new Promise((resolve, reject) => {
+            jQuery.ajax({
+                type: "POST",
+                url: "/components/com_regn/views/Registrering/tmpl/update.php",
+                data: ({
+                    mode: "artcheck",
+                    art: art
+                }),
+                cache: false,
+                success: function(tekst) {
+                    const obj1 = JSON.parse(tekst);
+                    resolve(obj1);
+                    console.log(obj1);
+                }
+            });
+        }
+    }
+
+    async function displayCommits() {
+        try {
+            const fart = await (fart()));
+            console.log(fart);
+        } catch (err) {
+            console.log('Error', err.message);
+        }
+    }
+
+    displayCommits();
+
+    //  alert("fart2 " + obj);
+    //  var obj=window.obj1;
+    /*
+      alert("obj: " + obj.Navn );
+      if (obj.dato !== null) document.getElementById("dato").value = obj.dato;
+      if (obj.debet !== null) document.getElementById("debet").value = obj.debet;
+      if (obj.kredit !== null) document.getElementById("kredit").value = obj.kredit;
+      if (obj.belop !== null) document.getElementById("belop").value = obj.belop;
+      if (obj.tekst !== null) document.getElementById("tekst").value = obj.tekst;
+      ktodef("debet");
+      ktodef("kredit");
+      document.getElementById("dato").focus();*/
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function hidden(i) {
+    //  var myhidden = document.getElementById("5");
+    alert("hidden ");
+    //  myhidden.value=boxHeight;
+}
+
+function UpdateRecord(ref, bilag) {
+    //  alert(ref + " : " + bilag);
+
+    var Dato = document.getElementById("dato").value;
+    //alert("dato: "+Dato);
+    var debet = document.getElementById("debet").value;
+    var kredit = document.getElementById("kredit").value;
+    var belop = document.getElementById("belop").value;
+    var tekst = document.getElementById("tekst").value;
+    var buntnr = document.getElementById("buntnr").value;
+    var bilagsart = "6";
+    //      alert(Dato);
+    if ((dato[2] == "-") && (dato[5] == "-")) {
+        //alert("ggg "+dato[2]+" : "+dato[5]);
+        var Dato = Dato.substring(6, 10) + "-" + dato.substring(3, 5) + "-" + dato.substring(0, 2);
+    };
+    // alert("før oppdatering "+dato);
+    jQuery.ajax({
+        type: "POST",
+        url: "/components/com_regn/views/Registrering/tmpl/update.php",
+        data: ({
+            mode: "trans",
+            Ref: ref,
+            Bilagsart: bilagsart,
+            bilag,
+            bilag,
+            Dato: Dato,
+            debet: debet,
+            kredit: kredit,
+            belop: belop,
+            tekst: tekst,
+            buntnr: buntnr
+        }),
+        cache: false,
+        success: function(tekst) {
+            //                       alert("Record successfully updated" + tekst);
+        }
+    });
+    location.reload();
+    document.getElementById("Dato").focus();
+    //   alert("ferdig");
+
+}
+//oppdater_base
+
+function oppdater_hist(id) {
+    // alert("oppdat");
+    jQuery.ajax({
+        type: "GET",
+        url: "/components/com_regn/views/Registrering/tmpl/update.php",
+        data: ({
+            mode: "oppdater"
+        }),
+        cache: false,
+        success: function(response) {
+            //        alert("Record successfully updated  " + response);
+        }
+    });
+    location.reload();
+    document.getElementById("tekst").innerHTML = response;
+    //   document.getElementById("Dato").focus();
+    ///   alert("ferdig");
+
+}
+
+function test1(id) {
+    jQuery.ajax({
+        type: "GET",
+        url: "/components/com_regn/views/Registrering/tmpl/update.php",
+        data: ({}),
+        cache: false,
+        success: function(response) {
+            return (response)
+        }
+    });
+    document.getElementById("tekst").innerHTML = response;
+
+
+}
+
+
+function test() {
+
+    alert(test1());
+
+}
+
+
+function selectChar(uname, cname) {
+    alert("electChar");
+    /*   var data = {
+        username : uname,
+        charname : cname
+    };
+  */
+    jQuery.ajax({
+        type: 'GET',
+        //      url: "/components/com_regn/views/Registrering/tmpl/start.php",
+        url: "/start.php",
+        data: ({}), //datastring,
+        cache: false,
+        success: function(data) {
+            alert(data);
+            //    return (response);
+        }
+        /*
+                      var data_character = JSON.parse(result);
+                    /*  var cnamediv = document.getElementById('belop');
+                      cnamediv.innerHTML = "";
+                      cnamediv.innerHTML = data_character[0].name;*/
+
+
+    });
+
+    alert("selectChar ferdig: "); // +response);
+}
+</script>

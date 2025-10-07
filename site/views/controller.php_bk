@@ -1,0 +1,144 @@
+<?php
+/**
+ * @package     Joomla.Administrator
+ * @subpackage  com_helloworld
+ *
+ * @copyright   Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
+/**
+ * Hello World Component Controller
+ *
+ * @since  0.0.1
+ */
+// if (isset($_POST['option']) && $_POST['option'] == "com_regn")
+// echo 'POST ackn<br>';
+//echo 'controller<br>';
+class RegnController extends JControllerLegacy
+{
+
+    public function yourtask()
+    {
+        echo 'yourtask:  <br>';
+        // Process the AJAX request
+        $param1 = JFactory::getApplication()->input->get('param1', '', 'STRING');
+        $param2 = JFactory::getApplication()->input->get('param2', '', 'STRING');
+
+        // Your processing logic here
+        $result = 'ReceivedA: ';// . $param1 . ' and ' . $param2;
+
+        // Return a JSON response
+        echo json_encode($result);
+        JFactory::getApplication()->close();
+    }
+
+
+    //     function abc2()
+//     {
+
+    //         //... handle the request, read variables, whatever
+//         print "this is what I want to place in my html";
+
+    // //     }
+
+
+    public function ajax()
+    {
+        echo 'ajax func<br>';
+        // $param1 = JFactory::getApplication()->input->get('param1', '', 'STRING');
+        // $param2 = JFactory::getApplication()->input->get('param2', '', 'STRING');
+
+        // Your processing logic here
+    //     $result =' hei'; //'ReceivedA: ' . $param1 . ' and ' . $param2;
+    //     echo json_encode($result);
+    //     JFactory::getApplication()->close();        
+    // }
+        $task = $this->getTask();
+        echo 'task: ' . $task . '<br>';
+        $user = JFactory::getUser();
+        echo 'user: '. $user;
+        $jinput = JFactory::getApplication()->input->get('fileName', '', 'STRING');;
+       //   echo '$jinput: '.$jinput.'<br>';
+        // Check Token!
+        $token = JSession::getFormToken();
+        $call_token = $jinput->get('token', 0, 'ALNUM');
+        echo '$call_token: ' . $call_token . '   ' . $task . '<br>';
+
+        //    if ($token == $call_token)
+        {
+            $task = $this->getTask();
+            echo 'task: ' . $task . '<br>';
+            switch ($task) {
+                //             case 'initialisePerson':
+                case 'initialisePerson':
+                    try {
+                        echo 'initialisePerson<br>';
+                        $returnRaw = $jinput->get('raw', false, 'BOOLEAN');
+                        $viewValue = $jinput->get('view', NULL, 'INT');
+
+                        if ($viewValue) {
+                            $result = $this->getModel('ajax')->displayDetails($viewValue);
+                        } else {
+                            $result = false;
+                        }
+                        if ($callback = $jinput->get('callback', null, 'CMD')) {
+                            echo $callback . "(" . json_encode($result) . ");";
+                        } elseif ($returnRaw) {
+                            echo json_encode($result);
+                        } else {
+                            echo "(" . json_encode($result) . ");";
+                        }
+                    } catch (Exception $e) {
+                        echo 'exception<br>';
+                        if ($callback = $jinput->get('callback', null, 'CMD')) {
+                            echo $callback . "(" . json_encode($e) . ");";
+                        } else {
+                            echo "(" . json_encode($e) . ");";
+                        }
+                    }
+                    break;
+            }
+
+        }
+        JFactory::getApplication()->close();
+    }
+
+    // public function execute()
+    // {
+    //     try {
+    //         $anyParam = JFactory::getApplication()->input->get('anyparam');
+
+    //         $result = $this->getModel('example')->createSomething($anyParam);
+
+    //         echo new JsonResponse($result);
+    //     } catch (Exception $e) {
+    //         echo new JsonResponse($e);
+    //     }
+    // }
+
+
+
+    public function execute1()
+    {
+        // try {
+           $anyParam = JFactory::getApplication()->input->get('fileName');
+
+        //     $result = $this->getModel('example')->createSomething($anyParam);
+
+        //     echo new JsonResponse($result);
+        // } catch (Exception $e) {
+        //     echo new JsonResponse($e);
+        // }
+        $result='hallo '. $anyParam;
+        echo json_encode($result);
+        JFactory::getApplication()->close();
+    }
+
+
+
+
+
+
+}

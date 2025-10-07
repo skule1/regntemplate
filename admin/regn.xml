@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.0" method="upgrade">
+
+	<name>Regn</name>
+	<!-- The following elements are optional and free of formatting constraints -->
+	<creationDate>Desember 2020</creationDate>
+	<author>Skule Sørmo</author>
+	<authorEmail>skule@sormo.no</authorEmail>
+	<authorUrl>https://skule.sormo.no</authorUrl>
+	<copyright>Copyright Info</copyright>
+	<license>License Info</license>
+	<!--  The version string is recorded in the components table -->
+	<version>0.0.1</version>
+	<!-- The description is optional and defaults to the name -->
+	<description>Regnskapsprogram i Joomla</description>
+
+	<install> <!-- Runs on install -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+	<uninstall> <!-- Runs on uninstall -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+
+	<update> <!-- Runs on update; New since J2.5 -->
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+		</schemas>
+	</update>
+
+	<config>
+      <fields name="params">
+        <!-- Other module parameters go here -->
+      </fields>
+     </config>
+
+
+	<files folder="site">
+		<filename>regn.php</filename>
+		<filename>controller.php</filename>
+		<filename>fc.php</filename>
+		<folder>views</folder>
+		<folder>controllers</folder>
+	</files>
+
+	<administration>		<!-- Administration Menu Section -->
+		<menu link="index.php?option=com_regn">Regn</menu>
+	<submenu>
+		<menu link="index.php?option=com_regn&amp;view=konfig">COM_REGN_CONFIG</menu>
+		<menu link="index.php?option=com_regn&amp;view=database">Database</menu>
+		<menu link="index.php?option=com_regn&amp;view=bakup">Backup</menu>
+		</submenu>		
+
+		<files folder="admin">
+			<filename>regn.php</filename>
+			<folder>sql</folder>
+			<folder>tables</folder>
+			<folder>models</folder>	
+			<folder>src</folder>	
+		</files>
+	</administration>
+
+</extension>
